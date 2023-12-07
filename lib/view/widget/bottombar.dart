@@ -4,8 +4,8 @@ import 'package:provider/provider.dart';
 import 'package:studentapp/controller/bottom_controller.dart';
 import 'package:studentapp/controller/home_controller.dart';
 import 'package:studentapp/helpers/app_colors.dart';
-import 'package:studentapp/view/list_view/home.dart';
-import 'package:studentapp/view/home_page/student_lists.dart';
+import 'package:studentapp/view/list_view/student_lists.dart';
+import 'package:studentapp/view/home_page/home_page.dart';
 
 class BottomBar extends StatelessWidget {
   BottomBar({super.key});
@@ -17,7 +17,7 @@ class BottomBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bottombarControlldata = Provider.of<BottomController>(context);
-    Provider.of<Homecontroller>(context,listen: false).fecthDonorDatas();
+    Provider.of<Homecontroller>(context, listen: false).fecthDonorDatas();
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,

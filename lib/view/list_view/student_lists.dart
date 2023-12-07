@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:studentapp/controller/home_controller.dart';
 import 'package:studentapp/helpers/app_colors.dart';
-import 'package:studentapp/model/donor_model.dart';
+import 'package:studentapp/model/student_model.dart';
 import 'package:studentapp/view/list_view/add_student.dart';
 import 'package:studentapp/view/list_view/update_page.dart';
+import 'package:studentapp/view/widget/appbar_title.dart';
 
 class UsersList extends StatelessWidget {
   UsersList({super.key});
@@ -17,28 +18,11 @@ class UsersList extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.black,
         automaticallyImplyLeading: false,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              'Stud',
-              style: TextStyle(
-                  color: AppColors().primarytheme,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold),
-            ),
-            const Text(
-              'ents ',
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold),
-            )
-          ],
-        ),
+        title: 
+        AppBarTitile(firstName: 'Stud', secondName: 'ents ')
       ),
       body: Consumer<Homecontroller>(builder: (context, value, index) {
-        if (value.donorDatas.isEmpty) {
+        if (value.studentDatas.isEmpty) {
           return Center(
               child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -68,9 +52,9 @@ class UsersList extends StatelessWidget {
         return Padding(
           padding: const EdgeInsets.only(top:20.0),
           child: ListView.builder(
-            itemCount: value.donorDatas.length,
+            itemCount: value.studentDatas.length,
             itemBuilder: (context, index) {
-              final StudentModel donorSnap = value.donorDatas[index];
+              final StudentModel donorSnap = value.studentDatas[index];
               return Padding(
                 padding: const EdgeInsets.only(right: 10, left: 10),
                 child: Container(
@@ -171,75 +155,3 @@ class UsersList extends StatelessWidget {
     );
   }
 }
-
-// import 'package:cloud_firestore/cloud_firestore.dart';
-// import 'package:flutter/material.dart';
-// import 'package:provider/provider.dart';
-// import 'package:studentapp/controller/add_controller.dart';
-
-// class UsersList extends StatelessWidget {
-//   UsersList({super.key});
-//   @override
-//   Widget build(BuildContext context) {
-//         final size = MediaQuery.of(context).size.width;
-//     final addData = Provider.of<AddController>(context);
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: const Text(
-//           'Donors List',
-//           style: TextStyle(color: Colors.white),
-//         ),
-//       ),
-//       body: StreamBuilder(
-//         stream: addData.donor.orderBy('name').snapshots(),
-//         builder: (context, AsyncSnapshot snapshot) {
-//           if (snapshot.hasData) {
-
-
-//               return GridView.builder(
-//                   itemCount: snapshot.data!.docs.length,
-//                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-//                     mainAxisSpacing: 10,
-//                     crossAxisSpacing: 10,
-//                     childAspectRatio: 4 / 5,
-//                     crossAxisCount: 2,
-//                   ),
-//                   itemBuilder: (context, index) {
-//                          final DocumentSnapshot donorSnap = snapshot.data.docs[index];
-//                     // MovieInfoModel data = searchProvider.searchResults[index];
-//                     return Container(
-//                       width: size * 0.45,
-//                       height: size * 0.5,
-//                       decoration: BoxDecoration(
-//                           borderRadius: BorderRadius.circular(10),
-//                           image: DecorationImage(
-//                             fit: BoxFit.cover,
-//                             image: NetworkImage(
-//                               donorSnap['image'] ),
-//                           )),
-//                     );
-//                   },
-//                 );
-
-
-      
-//           }
-//           return Container();
-//         },
-//       ),
-//       floatingActionButton: FloatingActionButton(
-//           backgroundColor: Colors.red,
-//           child: const Icon(
-//             Icons.add,
-//             color: Colors.white,
-//           ),
-//           onPressed: () {
-//             // Navigator.push(
-//             //     context,
-//             //     MaterialPageRoute(
-//             //       builder: (context) => AddPage(),
-//             //     ));
-//           }),
-//     );
-//   }
-// }

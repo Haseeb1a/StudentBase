@@ -3,7 +3,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:studentapp/controller/home_controller.dart';
-import 'package:studentapp/services/donor_service.dart';
+import 'package:studentapp/services/students_service.dart';
 
 class UpdateController extends ChangeNotifier {
   Homecontroller homeData = Homecontroller();
@@ -66,9 +66,9 @@ class UpdateController extends ChangeNotifier {
 
   // updateHonors
   updateStudent(docId, imageUrl) async {
-    await DonorFirebaseService().updateStudents(nameController.text,
+    await StudentFirebaseService().updateStudents(nameController.text,
         rollController.text, imageUrl, selectedDivison, docId);
-    homeData.donorDatas;
+    homeData.studentDatas;
     notifyListeners();
   }
 }

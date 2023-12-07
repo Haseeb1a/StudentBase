@@ -2,158 +2,191 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:studentapp/controller/add_controller.dart';
 import 'package:studentapp/helpers/app_colors.dart';
+import 'package:studentapp/view/widget/appbar_title.dart';
 import 'package:studentapp/view/widget/bottombar.dart';
 
 class AddPage extends StatelessWidget {
   const AddPage({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    final addData = Provider.of<AddController>(context);
+    final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+    final addData = Provider.of<AddController>(context, listen: false);
     // final profileProvider = Provider.of<>(context);
 
     return Scaffold(
-      // backgroundColor: AppColors().g,
+      backgroundColor: AppColors().darktheme,
       appBar: AppBar(
-        backgroundColor: Colors.black,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              'Student ',
-              style: TextStyle(
-                color: AppColors().primarytheme,
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const Text(
-              'ADD',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
-        ),
-      ),
+          backgroundColor: Colors.black,
+          title: AppBarTitile(firstName: 'Add', secondName: 'Student')),
       body: Padding(
         padding: const EdgeInsets.all(15.0),
-        child: ListView(
-          children: [
-            SizedBox(
-              width: 100,
-              
-              child: _showImage(context)),
-            const SizedBox(height: 20.0),
-            addData.imageFile == null
-                ? ElevatedButton(
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all<Color>(
-                          Colors.black), // Set your desired color
+        child: Form(
+          key: formKey,
+          child: ListView(
+            children: [
+              Consumer<AddController>(
+                builder: (context, controller, child) {
+                  if (controller.imageFile == null) {
+                    return Container(
+                        alignment: Alignment.center,
+                        width: 100,
+                        height: 300,
+                        color: Colors.grey.shade200,
+                        child: const Text('Image not found!'));
+                  } else {
+                    return InkWell(
+                      onTap: () async {
+                        await controller.pickImage();
+                      },
+                      child: controller.imageFile != null
+                          ? Container(
+                              alignment: Alignment.center,
+                              width: 100,
+                              height: 300,
+                              color: Colors.grey.shade100,
+                              child: Image.file(controller.imageFile!,
+                                  fit: BoxFit.fitWidth),
+                            )
+                          : Container(
+                              alignment: Alignment.center,
+                              width: 100,
+                              height: 300,
+                              color: Colors.grey.shade100,
+                              child: Image.network(controller.imageUrl,
+                                  fit: BoxFit.fitWidth),
+                            ),
+                    );
+                  }
+                },
+              ),
+              const SizedBox(height: 20.0),
+              addData.imageFile == null
+                  ? Center(
+                      child: ElevatedButton(
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all<Color>(
+                                AppColors()
+                                    .darkshade), // Set your desired color
+                          ),
+                          onPressed: () async {
+                            await addData.pickImage();
+                          },
+                          child: Text(
+                            'PICK IMAGE',
+                            style: TextStyle(color: AppColors().primarytheme),
+                          )),
+                    )
+                  : const Text('tap to change image '),
+              const SizedBox(height: 15),
+              TextFormField(
+                controller: addData.nameController,
+                decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.white,
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide.none,
+                      borderRadius: BorderRadius.circular(15),
                     ),
-                    onPressed: () async {
-                      await addData.pickImage();
-                    },
-                    child: const Text('PICK IMAGE'))
-                : Text('tap to change image '),
-            const SizedBox(height: 15),
-            TextField(
-              controller: addData.nameController,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Name',
+                    hintText: 'name'),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Name is required';
+                  }
+                  return null;
+                },
               ),
-            ),
-            const SizedBox(height: 15),
-            TextField(
-              controller: addData.rollController,
-              keyboardType: TextInputType.number,
-              maxLength: 2,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Roll',
+              const SizedBox(height: 15),
+              TextFormField(
+                controller: addData.rollController,
+                keyboardType: TextInputType.number,
+                maxLength: 2,
+                decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.white,
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide.none,
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    hintText: 'roll no'),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Roll number is required';
+                  }
+                  // Add more validation logic for the roll number if needed
+                  return null;
+                },
               ),
-            ),
-            const SizedBox(height: 15),
-            DropdownButtonFormField(
-              decoration: const InputDecoration(labelText: 'Select Standard'),
-              items: addData.divisions
-                  .map((e) => DropdownMenuItem(value: e, child: Text(e)))
-                  .toList(),
-              onChanged: (val) {
-                addData.selectedDivision = val as String?;
-              },
-            ),
-            const SizedBox(height: 15),
-            MaterialButton(
-              minWidth: double.infinity,
-              color: AppColors().darkshade,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  side: BorderSide(color: AppColors().primarytheme)),
-              onPressed: () {
-                addData.uploadImage();
-                // await profileProvider.uploadData();
-                //  addData.addDonor();
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => BottomBar(),
-                    ));
-                // addData.imageUrl = '';
-              },
-              child: const Text(
-                'Submit',
-                style: TextStyle(fontSize: 17, color: Colors.white),
+              const SizedBox(height: 15),
+              Container(
+                height: 60,
+                width: 290,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: DropdownButtonFormField(
+                  focusColor: Colors.white,
+                  decoration: const InputDecoration(
+                    label: Text(
+                      'Select Standard',
+                      style: TextStyle(
+                        color: Color.fromARGB(255, 0, 0, 0),
+                      ),
+                    ),
+                  ),
+                  items: addData.divisions
+                      .map((e) => DropdownMenuItem(
+                          value: e,
+                          child: Text(
+                            e,
+                            style: const TextStyle(
+                                fontSize: 17, fontWeight: FontWeight.bold),
+                          )))
+                      .toList(),
+                  onChanged: (val) {
+                    addData.selectedDivision = val as String?;
+                  },
+                  validator: (value) {
+                    if (value == null) {
+                      return 'Please select a division';
+                    }
+                    return null;
+                  },
+                ),
               ),
-            ),
-          ],
+              const SizedBox(height: 15),
+              Center(
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors().darkshade,
+                    shape: RoundedRectangleBorder(
+                      side: BorderSide(color: AppColors().primarytheme),
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                  ),
+                  onPressed: () {
+                    if (formKey.currentState!.validate()) {
+                      addData.uploadImage();
+                      // await profileProvider.uploadData();
+                      //  addData.addDonor();
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => BottomBar(),
+                          ));
+                      // addData.imageUrl = '';
+                    }
+                  },
+                  child: const Text(
+                    'Submit',
+                    style: TextStyle(fontSize: 17, color: Colors.white),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
-  }
-
-  Widget _showImage(BuildContext context) {
-    var controller = Provider.of<AddController>(context);
-
-    if (controller.imageFile == null) {
-      return Container(
-          decoration: BoxDecoration(
-              color: Colors.grey.shade200, shape: BoxShape.circle),
-          alignment: Alignment.center,
-          width: 10,
-          height: 150,
-          child: const Text('Image not found!'));
-    } else {
-      return InkWell(
-        onTap: () async {
-          await controller.pickImage();
-        },
-        child: controller.imageUrl == ''
-            ? SizedBox(
-              width: 40,
-              child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(50),
-                      color: const Color.fromARGB(255, 0, 0, 0),
-                      //  shape: BoxShape.circle
-                       ),
-                  alignment: Alignment.center,
-                  width: 50,
-                  height: 190,
-                  child: Image.file(controller.imageFile!, fit: BoxFit.cover),
-                ),
-            )
-            : Container(
-                decoration: BoxDecoration(
-                    color: Colors.grey.shade200, shape: BoxShape.circle),
-                alignment: Alignment.center,
-                width: 100,
-                height: 150,
-                child: Image.network(controller.imageUrl, fit: BoxFit.fitWidth),
-              ),
-      );
-    }
   }
 }

@@ -1,19 +1,19 @@
 
 import 'package:flutter/material.dart';
-import 'package:studentapp/model/donor_model.dart';
-import 'package:studentapp/services/donor_service.dart';
+import 'package:studentapp/model/student_model.dart';
+import 'package:studentapp/services/students_service.dart';
 
 class Homecontroller extends ChangeNotifier {
-  List<StudentModel> donorDatas = [];
-  // getDonors
+  List<StudentModel> studentDatas = [];
+  // getstudent
   Future<void> fecthDonorDatas() async {
-    donorDatas = await DonorFirebaseService().getDonors();
+    studentDatas = await StudentFirebaseService().getSudents();
     notifyListeners();
   }
 
-  // deletedonors
+  // deletestudent
   deleteSudent(docId) async {
-    await DonorFirebaseService().deleteSudents(docId);
+    await StudentFirebaseService().deleteSudents(docId);
     fecthDonorDatas();
     notifyListeners();
   }

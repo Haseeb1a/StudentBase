@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:studentapp/controller/add_controller.dart';
 import 'package:studentapp/controller/bottom_controller.dart';
 import 'package:studentapp/controller/home_controller.dart';
-import 'package:studentapp/controller/update.controller%20copy.dart';
+import 'package:studentapp/controller/update_controller.dart';
 import 'package:studentapp/firebase_options.dart';
 import 'package:studentapp/view/widget/bottombar.dart';
 

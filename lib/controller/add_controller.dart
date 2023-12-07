@@ -4,14 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:studentapp/controller/home_controller.dart';
 import 'package:studentapp/helpers/images.dart';
-import 'package:studentapp/services/donor_service.dart';
+import 'package:studentapp/services/students_service.dart';
 
 class AddController extends ChangeNotifier {
-  //  UploadDataController profileData = UploadDataController();
   Homecontroller homeData = Homecontroller();
   TextEditingController nameController = TextEditingController();
   TextEditingController rollController = TextEditingController();
-  // TextEditingController numberController = TextEditingController();
   final List divisions = [
     'I',
     'II',
@@ -64,17 +62,19 @@ class AddController extends ChangeNotifier {
     }
   }
 
+
+// -----------------------------------
   void addSudent(imageUrl) {
     print(imageUrl);
     print(rollController.text);
     print(nameController.text);
-    DonorFirebaseService().addSudents(
+    StudentFirebaseService().addSudents(
       nameController.text,
       rollController.text,
       imageUrl,
       selectedDivision,
     );
-    homeData.donorDatas;
+    homeData.studentDatas;
     notifyListeners();
     nameController.clear();
     rollController.clear();
