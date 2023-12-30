@@ -37,6 +37,7 @@ dependencies:
   flutter:
     sdk: flutter
   image_picker: ^1.0.4
+  flutter_slidable: null
   provider: ^6.1.1
 dev_dependencies:
   flutter_lints: ^2.0.0

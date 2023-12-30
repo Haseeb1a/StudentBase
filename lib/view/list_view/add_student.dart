@@ -14,6 +14,7 @@ class AddPage extends StatelessWidget {
     // final profileProvider = Provider.of<>(context);
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: AppColors().darktheme,
       appBar: AppBar(
           backgroundColor: Colors.black,
@@ -22,31 +23,44 @@ class AddPage extends StatelessWidget {
         padding: const EdgeInsets.all(15.0),
         child: Form(
           key: formKey,
-          child: ListView(
+          child: Column(
             children: [
               Consumer<AddController>(
                 builder: (context, controller, child) {
                   if (controller.imageFile == null) {
-                    return Container(
-                        alignment: Alignment.center,
-                        width: 100,
-                        height: 300,
-                        color: Colors.grey.shade200,
-                        child: const Text('Image not found!'));
+                    return SizedBox(
+                      height: 180,
+                      width: 180,
+                      child: Center(
+                          child: Container(
+                        decoration: BoxDecoration(
+                            color: AppColors().whitetheme,
+                            borderRadius: BorderRadius.circular(70)),
+                        child: Image.network(
+                          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ3y_LkC_BzLo_QScuzzf4jaJsy7_QPz4BvXw&usqp=CAU',
+                          fit: BoxFit.cover,
+                        ),
+                      )),
+                    );
                   } else {
                     return InkWell(
                       onTap: () async {
                         await controller.pickImage();
                       },
                       child: controller.imageFile != null
-                          ? Container(
-                              alignment: Alignment.center,
-                              width: 100,
-                              height: 300,
-                              color: Colors.grey.shade100,
-                              child: Image.file(controller.imageFile!,
-                                  fit: BoxFit.fitWidth),
-                            )
+                          ? SizedBox(
+                      height: 180,
+                      width: 180,
+                      child: ClipRRect(
+                        // decoration: BoxDecoration(
+                        //     color: AppColors().whitetheme,
+                        borderRadius: BorderRadius.circular(50),
+                        // ),
+                      child: Image.file(controller.imageFile!,
+                      fit: BoxFit.cover,
+                        ),
+                      ),
+                    )
                           : Container(
                               alignment: Alignment.center,
                               width: 100,
@@ -96,30 +110,34 @@ class AddPage extends StatelessWidget {
                 },
               ),
               const SizedBox(height: 15),
-              TextFormField(
-                controller: addData.rollController,
-                keyboardType: TextInputType.number,
-                maxLength: 2,
-                decoration: InputDecoration(
-                    filled: true,
-                    fillColor: Colors.white,
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide.none,
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    hintText: 'roll no'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Roll number is required';
-                  }
-                  // Add more validation logic for the roll number if needed
-                  return null;
-                },
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric( vertical: 15),
+                child: TextFormField(
+                  controller: addData.rollController,
+                  keyboardType: TextInputType.number,
+                  maxLength: 2,
+                  decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.white,
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide.none,
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      hintText: 'roll no'),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Roll number is required';
+                    }
+                    // Add more validation logic for the roll number if needed
+                    return null;
+                  },
+                ),
               ),
               const SizedBox(height: 15),
               Container(
                 height: 60,
-                width: 290,
+                width: 375,
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(15),
@@ -154,7 +172,7 @@ class AddPage extends StatelessWidget {
                   },
                 ),
               ),
-              const SizedBox(height: 15),
+              const SizedBox(height: 25),
               Center(
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(

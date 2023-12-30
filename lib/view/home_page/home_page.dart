@@ -18,7 +18,7 @@ class StudentList extends StatelessWidget {
       appBar: AppBar(
           backgroundColor: Colors.black,
           automaticallyImplyLeading: false,
-          title: AppBarTitile(firstName: 'Student ', secondName: 'DB')),
+          title: AppBarTitile(firstName: 'Student ', secondName: 'Base')),
       body: Consumer<Homecontroller>(
         builder: (context, value, index) {
           if (value.studentDatas.isEmpty) {
@@ -74,7 +74,7 @@ class StudentList extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             Text(
-                              'Total Studerts',
+                              'Total Students',
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   color: AppColors().primarytheme,

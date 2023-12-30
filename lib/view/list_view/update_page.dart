@@ -34,16 +34,17 @@ class UpdataUser extends StatelessWidget {
     // final updataController = Provider.of<UpdateController>(context);
     //updateData.imageUrl = image;
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Colors.black,
       appBar: AppBar(
         backgroundColor: Colors.black,
-        title: AppBarTitile(firstName: 'Edit', secondName: "Students"),
+        title: AppBarTitile(firstName: 'Edit', secondName: " Students"),
       ),
       body: Padding(
         padding: const EdgeInsets.all(15.0),
         child: Form(
           key: formKey,
-          child: ListView(
+          child: Column(
             children: [
               Consumer<UpdateController>(
                 builder: (context, controller, child) {
@@ -51,9 +52,11 @@ class UpdataUser extends StatelessWidget {
                   if (controller.imageFile == null &&
                       controller.imageUrl.isEmpty) {
                     return Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(50)),
                         alignment: Alignment.center,
-                        width: 100,
-                        height: 300,
+                        // width: 100,
+                        // height: 300,
                         color: Colors.grey.shade200,
                         child: const Text('Image not found!'));
                   } else {
@@ -62,21 +65,30 @@ class UpdataUser extends StatelessWidget {
                         await controller.pickImage();
                       },
                       child: controller.imageFile != null
-                          ? Container(
-                              alignment: Alignment.center,
-                              width: 100,
-                              height: 300,
-                              color: Colors.grey.shade100,
-                              child: Image.file(controller.imageFile!,
-                                  fit: BoxFit.fitWidth),
-                            )
-                          : Container(
-                              alignment: Alignment.center,
-                              width: 100,
-                              height: 300,
-                              color: Colors.grey.shade100,
-                              child: Image.network(controller.imageUrl,
-                                  fit: BoxFit.fitWidth),
+                          ? SizedBox(
+                              width: 200,
+                                height: 200,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(50),
+                                // decoration: BoxDecoration(
+                                //     color: Colors.grey.shade100,
+                                //     ),
+                                // alignment: Alignment.center,
+                              
+                                child: Image.file(controller.imageFile!,
+                                    fit: BoxFit.cover),
+                              ),
+                          )
+                          : SizedBox(
+                              width: 200,
+                              height: 200,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(50),
+                                child: Image.network(
+                                  controller.imageUrl,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
                             ),
                     );
                   }
@@ -125,7 +137,8 @@ class UpdataUser extends StatelessWidget {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 9, vertical: 15),
                 child: TextFormField(
                   controller: updateData.rollController,
                   keyboardType: TextInputType.number,
@@ -146,49 +159,46 @@ class UpdataUser extends StatelessWidget {
                   },
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  height: 60,
-                  width: 290,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  child: DropdownButtonFormField(
-                    focusColor: Colors.white,
-                    value: updateData.selectedDivison,
-                    decoration: const InputDecoration(
-                      label: Text(
-                        'Select Standard',
-                        style: TextStyle(
-                          color: Colors.white,
-                        ),
+              Container(
+                height: 60,
+                width: 365,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: DropdownButtonFormField(
+                  focusColor: Colors.white,
+                  value: updateData.selectedDivison,
+                  decoration: const InputDecoration(
+                    label: Text(
+                      'Select Standard',
+                      style: TextStyle(
+                        color: Colors.white,
                       ),
                     ),
-                    items: updateData.divistions
-                        .map((e) => DropdownMenuItem(
-                            value: e,
-                            child: Text(
-                              e,
-                              style: const TextStyle(
-                                  fontSize: 17, fontWeight: FontWeight.bold),
-                            )))
-                        .toList(),
-                    onChanged: (val) {
-                      updateData.selectedDivison = val as String?;
-                    },
-                    validator: (value) {
-                      if (value == null) {
-                        return 'Please select a division';
-                      }
-                      return null;
-                    },
                   ),
+                  items: updateData.divistions
+                      .map((e) => DropdownMenuItem(
+                          value: e,
+                          child: Text(
+                            e,
+                            style: const TextStyle(
+                                fontSize: 17, fontWeight: FontWeight.bold),
+                          )))
+                      .toList(),
+                  onChanged: (val) {
+                    updateData.selectedDivison = val as String?;
+                  },
+                  validator: (value) {
+                    if (value == null) {
+                      return 'Please select a division';
+                    }
+                    return null;
+                  },
                 ),
               ),
               const SizedBox(
-                height: 10,
+                height: 25,
               ),
               Center(
                 child: ElevatedButton(

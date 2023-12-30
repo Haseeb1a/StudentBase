@@ -32,9 +32,6 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (context) => BottomController(),
         ),
-        //  ChangeNotifierProvider(
-        //   create: (context) =>UploadDataController (),
-        // )
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

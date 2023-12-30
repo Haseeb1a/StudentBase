@@ -5,7 +5,7 @@ class StudentFirebaseService {
   final CollectionReference student =
       FirebaseFirestore.instance.collection('students');
 
-  // donor fetch
+  //  fetch students
   Future<List<StudentModel>> getSudents() async {
     final snapshot = await student.orderBy('name').get();
     return snapshot.docs.map((doc) {
@@ -13,10 +13,13 @@ class StudentFirebaseService {
     }).toList();
   }
 
-  // addd donor
-  addSudents(name, roll, image ,stand) {
-    final data = StudentModel(name: name, roll: roll, image: image,
-    stand: stand,
+  // add stdents
+  addSudents(name, roll, image, stand) {
+    final data = StudentModel(
+      name: name,
+      roll: roll,
+      image: image,
+      stand: stand,
     ).toMap();
     student.add(data);
   }
@@ -27,9 +30,12 @@ class StudentFirebaseService {
   }
 
   // update Students
-  updateStudents(name, roll, image ,stand, id) {
-     final data = StudentModel(name: name, roll: roll, image: image,
-    stand: stand,
+  updateStudents(name, roll, image, stand, id) {
+    final data = StudentModel(
+      name: name,
+      roll: roll,
+      image: image,
+      stand: stand,
     ).toMap();
     student.doc(id).update(data);
   }
